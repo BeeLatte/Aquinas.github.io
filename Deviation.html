@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DEVIATION CALCULATOR</title>
+</head>
+<style type="text/css">
+
+.background {
+	background-image: linear-gradient(to bottom, white, grey);
+	height: 800px;
+}
+
+.Title {
+	background-color: black;
+	height: 200px;
+	border-radius: 20px;
+}
+
+.titleText{
+	color: white;
+	font-family: "Times New Roman";
+	font-size: 38px;
+	text-align: center;
+}
+
+.Selection {
+	color: white;
+	font-size: 18px;
+	margin-left: 23px;
+}
+
+.separator{
+	margin-left: auto;
+	margin-right: auto;
+	background-color: grey;
+	height: 2px;
+	width: 300px
+}
+
+.commonHeader {
+	color: white;
+	font-size: 18px;
+	text-align: center;
+}
+
+.inputSection {
+	background-color: black;
+	height: 150px;
+	border-radius: 20px;
+	margin-top: 20px;
+}
+
+.input {
+	background-color: grey;
+	color: white;
+	margin-left: 10px;
+	border:0px;
+	border-radius: 5px;
+	font-size: 18px;
+}
+
+.sampleSection {
+	background-color: black;
+	border-radius: 20px;
+	margin-top: 20px;
+}
+
+.sampleStyle {
+	color: grey;
+	font-weight: Bold;
+	font-size: 20px;
+	overflow-y: scroll;
+}
+
+.enter:active {
+	background-color: black;
+	color: white;
+}
+
+.solveButton {
+	font-weight: bold;
+	font-size: 30px;
+	margin-left: 125px;
+	border-radius: 20px;
+}
+
+.solveButton:active {
+	background-color: black;
+	color: white;
+}
+
+.clear {
+	margin-left: 280px;
+	border-radius: 5px;
+}
+
+.clear:active {
+	background-color: black;
+	color: white;
+}
+
+.answerSection {
+	background-color: black;
+	border-radius: 20px;
+	margin-top: 20px;
+	color: white;
+	font-size: 12px;
+}
+
+.answerText {
+	margin-left: 10px;
+	margin-right: 10px
+}
+
+</style>
+<body class = "background">
+<div>
+	<div class = "Title">
+		<h1 class = "titleText">
+		Deviation Calculator
+		</h1>
+		<div class = "separator">
+		</div>
+		<h2 class ="Selection">
+		Select Type: 
+		<select class = "Selection" id = "deviationType">
+			<option>Standard Deviation</option>
+			<option>Sample Deviation</option>
+		</select>
+		</h2>
+	</div>
+	<div class = "inputSection">
+		<h1 class = "commonHeader">
+		<br>
+		Enter your samples here:
+		</h1>
+		<input class = "input" type = "text" id = "givenInput">
+		<input class = "enter" onclick = "enterButton()" type = "button" value = "Enter">
+		<p style = "color: white;" id = "pop">Population/Sample Size:</p>
+	</div>
+	<div class = "sampleSection">
+		<h1 class = "commonHeader">
+		Your samples are listed here.
+		</h1>
+		<p class = "sampleStyle">
+		Samples:
+		</p>
+		<p class = "sampleStyle" id = "xlist" style = "color:black; background-color: grey; border-radius: 10px; border: 3px solid black; font-size: 30px">
+		0
+		</p>
+			<input class = "clear" type = "button" onclick = "clearButton()" value = "Clear">
+		<div>
+			<input  class = "solveButton" type = "button" onclick = "solveButton()" value ="Solve">
+		</div>
+	</div>
+	<div class ="answerSection">
+		<br>
+		<h1 class = "answerText" id = "answer">
+			[The Answers Are Displayed Here]
+		</h1>
+		<br>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    enterButton();
+  }
+});
+
+const answerSect = document.getElementById("answer")
+
+const list = document.getElementById("xlist")
+const userInput = document.getElementById("givenInput")
+const button = document.getElementByClass("enter")
+const input = document.querySelector("input")
+
+function enterButton() {
+	let status = parseFloat(list.innerHTML)
+	if (status === 0) {
+		list.innerHTML = userInput.value
+		userInput.value = ""
+		let def = "Population/Sample Size: "
+		document.getElementById("pop").innerHTML = def + list.innerHTML.split(", ").length
+	}
+	
+	if (status !== 0) {
+		let prev = list.innerHTML
+		let input = userInput.value
+		list.innerHTML = "" + prev + ", " + input
+		userInput.value = ""
+		let len = list.innerHTML.split(", ").length
+		let def = "Population/Sample Size: "
+		document.getElementById("pop").innerHTML = def + len
+	}
+}
+
+function solveButton() {
+	const devType = document.getElementById("deviationType")
+	let samList = list.innerHTML
+	let dev = String(devType.value)
+	let sum = sumLoop(samList)
+	let len = samList.split(", ").length
+	let mean = findMean(sum, len)
+	let top = topOperation(mean, samList, len)
+	
+	let variance = answer(top, len, dev)
+	
+	answerSect.innerHTML = "Sum = " + sum + "<br>Mean =" + mean + "<br>Variance = " + variance
+}
+
+function sumLoop(samList) {
+	let samples = samList.split(", ")
+	let len = samples.length
+	let sum = 0
+	var i = len
+	
+	while (i !== 0){
+		i -= 1
+		sum += parseFloat(samples[i])
+	}
+	return sum
+}
+
+function findMean(sum, len) {
+	let mean = sum / len
+	return mean
+}
+
+function topOperation(mean, samList, len) {
+	let i = len
+	let answer = ""
+	let samples = samList.split(", ")
+	s = 0
+	
+	while (i !== 0) {
+		i -= 1
+		let x = parseFloat(samples[i])
+		let dif = x - mean
+		let prod = dif ** 2
+		s += prod
+	}
+	return s
+}
+
+function answer(top, len, dev) {
+	if (dev === "Standard Deviation") {
+		let ans = top / len
+		return ans
+	}
+	
+	if (dev === "Sample Deviation") {
+		let ans = top / (len -1)
+		return ans
+	}
+}
+
+function clearButton() {
+	list.innerHTML = "0"
+	answerSect.innerHTML = "[The Answers Are Displayed Here]"
+}
+
+</script>
+</html>
