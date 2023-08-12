@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Calculator: Prototype 1</title>
+</head>
+<body>
+  
+<h1>Calculator(Prototype)</h1>
+<div class = 'frame'>
+  <div class = 'displayFrame'>
+    <h2 class = 'display' id = 'display'>
+      Please press 'Start'
+    </h2>
+  </div>
+  <div class = 'buttonPad'>
+    <div>
+      <input type = 'button' class = 'clear' value = 'Start' onclick = 'clearButton()' id = 'clear'>
+      <input type = 'button' class = 'erase' value = '←' onclick = 'backspace()'>
+      <input type = 'button' class = 'operation' value = '÷' onclick = 'operator(4)'>
+    </div>
+    <div>
+      <input type = 'button' class = 'number' value = '7' onclick = 'number(7)'>
+      <input type = 'button' class = 'number' value = '8' onclick = 'number(8)'>
+      <input type = 'button' class = 'number' value = '9' onclick = 'number(9)'>
+      <input type = 'button' class = 'operation' value = '×' onclick = 'operator(3)'>
+    </div>
